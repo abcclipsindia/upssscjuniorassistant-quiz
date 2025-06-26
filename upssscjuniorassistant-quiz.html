@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPSSSC Junior Assistant Mock Test (100 Questions)</title>
+    <style>
+        /* --- Google Fonts & Basic Styles --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Teko:wght@600&display=swap');
+
+        :root {
+            --insta-gradient: linear-gradient(45deg, #007bff 0%, #00c6ff 100%);
+            --primary-color: #007bff;
+            --secondary-color: #343a40;
+            --light-color: #ffffff;
+            --bg-color: #f8f9fa;
+            --gray-color: #dee2e6;
+            --dark-gray-color: #495057;
+            --correct-color: #28a745;
+            --incorrect-color: #dc3545;
+            --timer-color: #17a2b8;
+            --shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            --border-radius: 15px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--dark-gray-color);
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .quiz-wrapper {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--light-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        header {
+            background: var(--insta-gradient);
+            padding: 25px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-family: 'Teko', sans-serif;
+            font-weight: 600;
+            font-size: 3rem;
+            color: var(--light-color);
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
+        }
+
+        main {
+            padding: 25px 30px 40px 30px;
+        }
+
+        /* --- Exam Info Section --- */
+        #exam-info-container {
+            padding: 10px;
+        }
+        #exam-info-container h2 {
+            font-family: 'Teko', sans-serif;
+            color: var(--secondary-color);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+        }
+        #exam-info-container ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 15px;
+        }
+        #exam-info-container li {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+        #exam-info-container li strong {
+            color: var(--secondary-color);
+        }
+        .start-quiz-btn-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        #start-quiz-btn {
+            background: var(--insta-gradient);
+            border: none;
+            color: var(--light-color);
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50px;
+        }
+        #start-quiz-btn:hover { transform: scale(1.05); }
+
+        /* --- Quiz Content --- */
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+
+        .progress-bar-container {
+            flex-grow: 1;
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--insta-gradient);
+            border-radius: 10px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        #timer-container {
+            font-weight: 600;
+            color: var(--secondary-color);
+            background-color: #eef7ff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        #timer-container.warning {
+            background-color: #fff0f0;
+            color: var(--incorrect-color);
+        }
+        #question-counter {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        #quiz-container { min-height: 350px; }
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn {
+            display: block; width: 100%; background-color: transparent;
+            border: 2px solid var(--gray-color); border-radius: 10px;
+            padding: 15px; cursor: pointer; transition: all 0.2s ease;
+            font-size: 1rem; font-family: 'Poppins', sans-serif;
+            text-align: left; color: var(--dark-gray-color);
+        }
+        .option-btn:not(:disabled):hover { border-color: var(--primary-color); background-color: #e7f3ff; }
+        .option-btn.correct { background-color: #d4edda; border-color: var(--correct-color); color: #155724; font-weight: 600; }
+        .option-btn.incorrect { background-color: #f8d7da; border-color: var(--incorrect-color); color: #721c24; font-weight: 600; }
+        .option-btn:disabled { cursor: not-allowed; }
+        .quiz-navigation { text-align: center; margin-top: 30px; height: 50px; }
+        #next-btn {
+            background: var(--primary-color); border: none; color: var(--light-color);
+            padding: 12px 45px; font-size: 1.1rem; font-weight: 600;
+            cursor: pointer; transition: all 0.3s ease; border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+        #next-btn:hover { transform: scale(1.05); }
+
+        /* --- Results Screen --- */
+        #results-container { text-align: center; padding: 40px; }
+        #results-container h2 {
+            font-family: 'Teko', sans-serif; font-size: 2.8rem;
+            color: var(--secondary-color); margin-bottom: 15px;
+        }
+        #score-text { font-size: 1.6rem; font-weight: 600; color: var(--primary-color); margin-bottom: 30px; }
+        #retry-btn {
+            background: var(--secondary-color); border: none; color: var(--light-color);
+            padding: 12px 35px; font-size: 1.1rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; border-radius: 50px;
+        }
+        #retry-btn:hover { opacity: 0.9; }
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .quiz-wrapper { border-radius: 0; min-height: 100vh; }
+            main { padding: 20px; }
+            .main-title { font-size: 1.7rem; }
+            .question-text { font-size: 1.15rem; }
+            .quiz-header { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-wrapper">
+        <header>
+            <h1 class="main-title">UPSSSC JUNIOR ASSISTANT MOCK TEST</h1>
+        </header>
+        <main>
+            <div id="exam-info-container">
+                <h2>कनिष्ठ सहायक परीक्षा पैटर्न</h2>
+                 <ul>
+                    <li><strong>कुल प्रश्न:</strong> 100</li>
+                    <li><strong>कुल अंक:</strong> 100</li>
+                    <li><strong>परीक्षा अवधि:</strong> 2 घंटे (120 मिनट)</li>
+                    <li><strong>नकारात्मक अंकन:</strong> 1/4 अंक (प्रत्येक गलत उत्तर पर)</li>
+                </ul>
+                <h3>विषयवार प्रश्नों का विवरण:</h3>
+                <ul>
+                    <li><strong>हिन्दी परिज्ञान एवं लेखन योग्यता:</strong> 30 प्रश्न</li>
+                    <li><strong>सामान्य बुद्धि परीक्षण:</strong> 15 प्रश्न</li>
+                    <li><strong>सामान्य जानकारी:</strong> 20 प्रश्न</li>
+                    <li><strong>कंप्यूटर एवं सूचना प्रौद्योगिकी:</strong> 15 प्रश्न</li>
+                    <li><strong>उत्तर प्रदेश (UP GK):</strong> 20 प्रश्न</li>
+                </ul>
+                <div class="start-quiz-btn-container">
+                     <button id="start-quiz-btn">मॉक टेस्ट शुरू करें</button>
+                </div>
+            </div>
+
+            <div id="quiz-content" class="hidden">
+                <div class="quiz-header">
+                     <div class="progress-bar-container">
+                        <div id="progress-bar"></div>
+                    </div>
+                    <div id="timer-container">
+                        <span id="timer">02:00:00</span>
+                    </div>
+                </div>
+                <p class="question-counter" id="question-counter"></p>
+                <div id="quiz-container">
+                     <p class="question-text" id="question-text"></p>
+                     <div class="options-container" id="options-container"></div>
+                </div>
+                <div class="quiz-navigation">
+                    <button id="next-btn" class="hidden">अगला प्रश्न</button>
+                </div>
+            </div>
+
+            <div id="results-container" class="hidden">
+                <h2>टेस्ट पूरा हुआ!</h2>
+                <p id="score-text">Your score will appear here.</p>
+                <button id="retry-btn">पुनः प्रयास करें</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const elements = {
+            examInfoContainer: document.getElementById('exam-info-container'),
+            startQuizBtn: document.getElementById('start-quiz-btn'),
+            quizContent: document.getElementById('quiz-content'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            nextBtn: document.getElementById('next-btn'),
+            resultsContainer: document.getElementById('results-container'),
+            retryBtn: document.getElementById('retry-btn'),
+            scoreText: document.getElementById('score-text'),
+            progressBar: document.getElementById('progress-bar'),
+            questionCounter: document.getElementById('question-counter'),
+            timer: document.getElementById('timer'),
+            timerContainer: document.getElementById('timer-container'),
+        };
+
+        const quizQuestions = [
+            // Hindi (30 Questions)
+            { subject: "हिन्दी", question: "'अध्यक्ष' में कौन-सा उपसर्ग है?", options: ["अधि", "अध्", "अत्", "अद्"], answer: "अधि" },
+            { subject: "हिन्दी", question: "'संग्राम' में उपसर्ग बताइए।", options: ["सम्", "सन्", "स", "सत्"], answer: "सम्" },
+            { subject: "हिन्दी", question: "इनमें से 'पृथ्वी' कौन-सा शब्द है?", options: ["तद्भव", "विदेशज", "तत्सम", "इनमें से कोई नहीं"], answer: "तत्सम" },
+            { subject: "हिन्दी", question: "संप्रदान कारक का परसर्ग (विभक्ति चिह्न) है-", options: ["का", "को", "से", "के लिए"], answer: "के लिए" },
+            { subject: "हिन्दी", question: "मैं चित्र बना रहा हूँ। वाक्य में कौन सा काल है?", options: ["भविष्य", "भूत", "वर्तमान", "अनिश्चित"], answer: "वर्तमान" },
+            { subject: "हिन्दी", question: "आलु किस भाषा का शब्द है?", options: ["पुर्तगाली", "अरबी", "चीनी", "अंग्रेजी"], answer: "पुर्तगाली" },
+            { subject: "हिन्दी", question: "'श' वर्ण का उच्चारण स्थान है-", options: ["ओष्ठ", "तालु", "दन्त", "मूर्धा"], answer: "तालु" },
+            { subject: "हिन्दी", question: "निम्नलिखित में से कौन-सा गूलर का फूल होना मुहावरे का सही अर्थ है?", options: ["बहुत सुंदर होना", "दुर्लभ वस्तु", "विवरण देना", "बहुत ज़्यादा खुश होना"], answer: "दुर्लभ वस्तु" },
+            { subject: "हिन्दी", question: "'लंबोदर' कौन-सा समास है?", options: ["द्वंद्व", "द्विगु", "तत्पुरुष", "बहुव्रीहि"], answer: "बहुव्रीहि" },
+            { subject: "हिन्दी", question: "‘उसने कहा कि मैं निर्दोष हूँ’, इस वाक्य को सरल वाक्य में बदलें।", options: ["उसने अपने को निर्दोष घोषित किया।", "जैसे ही उसने कहा, वह निर्दोष है।", "उसके कहते ही सब मान गए कि वह निर्दोष है।", "उसने कहा और वह निर्दोष निकला।"], answer: "उसने अपने को निर्दोष घोषित किया।" },
+            { subject: "हिन्दी", question: "'यद्यपि' का संधि-विच्छेद क्या है?", options: ["यद्य + अपि", "य + द्यपि", "यदि + अपि", "यदा + अपि"], answer: "यदि + अपि" },
+            { subject: "हिन्दी", question: "'अमृत' का पर्यायवाची शब्द है-", options: ["पीयूष", "उदक", "अम्बु", "शहद"], answer: "पीयूष" },
+            { subject: "हिन्दी", question: "'तरनि' का पर्यायवाची शब्द है-", options: ["सूर्य", "नाम", "युवती", "नदी"], answer: "सूर्य" },
+            { subject: "हिन्दी", question: "'अपव्यय' शब्द का विलोम है-", options: ["अधिव्यय", "व्यय", "मितव्यय", "इनमें से कोई नहीं"], answer: "मितव्यय" },
+            { subject: "हिन्दी", question: "वाक्य के अशुद्ध भाग का चयन कीजिए: ‘मैं पटना गया तो उस समय मेरे पास केवल बीस रुपये मात्र थे।’", options: ["मैं पटना गया", "तो उस समय", "मेरे पास केवल", "बीस रुपये मात्र थे"], answer: "बीस रुपये मात्र थे" },
+            { subject: "हिन्दी", question: "‘होनहार बिरवान के होत चीकने पात’ लोकोक्ति का सही अर्थ है-", options: ["होनहार बालक सुंदर होता है।", "होनहार बालक के लक्षण बचपन से ही प्रकट होने लगते हैं।", "सुंदर बालक होनहार होता है।", "इनमें से कोई नहीं"], answer: "होनहार बालक के लक्षण बचपन से ही प्रकट होने लगते हैं।" },
+            { subject: "हिन्दी", question: "निम्नलिखित में से कौन-सा शब्द पुल्लिंग है?", options: ["आशा", "आज्ञा", "गरिमा", "सागर"], answer: "सागर" },
+            { subject: "हिन्दी", question: "किस शब्द का प्रयोग सदा बहुवचन में होता है?", options: ["लड़का", "घोड़ा", "प्राण", "वधू"], answer: "प्राण" },
+            { subject: "हिन्दी", question: "शुद्ध वर्तनी वाला शब्द कौन-सा है?", options: ["सुसुप्ति", "सुषुप्ति", "सुसुप्ती", "सुसुप्ति"], answer: "सुषुप्ति" },
+            { subject: "हिन्दी", question: "' जानने की इच्छा रखने वाला' के लिए एक शब्द है-", options: ["जिज्ञासु", "ज्ञानी", "ऋषि", "जिजीविषा"], answer: "जिज्ञासु" },
+            // ... (Add 10 more Hindi questions)
+            { subject: "हिन्दी", question: "‘पवन’ का संधि-विच्छेद है-", options: ["प + अवन", "पो + अन", "पव + न", "प + वन"], answer: "पो + अन" },
+            { subject: "हिन्दी", question: "'पुनर्जन्म' का संधि-विच्छेद है-", options: ["पुनः + जन्म", "पुर् + जन्म", "पुन + जन्म", "पुनः + आजन्म"], answer: "पुनः + जन्म" },
+            { subject: "हिन्दी", question: "'इत्यादि' शब्द में कौन-सी संधि है?", options: ["यण संधि", "वृद्धि संधि", "गुण संधि", "दीर्घ संधि"], answer: "यण संधि" },
+            { subject: "हिन्दी", question: "'नाक रगड़ना' का क्या अर्थ है?", options: ["नाक में चोट लगना", "इज्जत देना", "दीनतापूर्वक प्रार्थना करना", "चापलूसी करना"], answer: "दीनतापूर्वक प्रार्थना करना" },
+            { subject: "हिन्दी", question: "‘उन्मूलन’ का विलोम क्या है?", options: ["उत्थान", "उत्कर्ष", "रोपण", "अवनति"], answer: "रोपण" },
+            { subject: "हिन्दी", question: "‘कौन-सा तुर्की शब्द नहीं है?", options: ["डेरा", "बावर्ची", "बेगम", "दरोगा"], answer: "डेरा" },
+            { subject: "हिन्दी", question: "‘जो हर समय अपना मतलब साधता हो’ उसे क्या कहा जाता है?", options: ["परमार्थी", "स्वार्थी", "स्वार्थी", "मतलबी"], answer: "स्वार्थी" },
+            { subject: "हिन्दी", question: "‘बहिर्मुखी’ शब्द में कौन-सा उपसर्ग है?", options: ["बहिर्", "बहिस", "बहि", "बहिः"], answer: "बहिः" },
+            { subject: "हिन्दी", question: "निम्न में से कौन-सा वाक्य मिश्र वाक्य नहीं है?", options: ["यह वही बच्चा है जिसे बैल ने मारा।", "एक विज्ञान गोष्ठी हुई जिसमें अनेक वक्ता बोले।", "वह परिश्रमी ही नहीं वरन् ईमानदार भी है।", "मैंने एक पुस्तक खरीदी जो नई है।"], answer: "वह परिश्रमी ही नहीं वरन् ईमानदार भी है।" },
+            { subject: "हिन्दी", question: "‘साहित्य’ से संबंधित के लिए एक शब्द होगा-", options: ["साहित्यिक", "लेखक", "कवि", "नाटककार"], answer: "साहित्यिक" },
+
+
+            // General Reasoning (15 Questions)
+            { subject: "रीजनिंग", question: "यदि किसी सांकेतिक भाषा में 'NIGHT' को 'ODDGM' लिखा जाता है, तो 'GREEN' को उसी भाषा में कैसे लिखा जाएगा?", options: ["IPIIC", "FPFFM", "IKFFM", "GRRNE"], answer: "IKFFM" },
+            { subject: "रीजनिंग", question: "विषम शब्द को चुनिए।", options: ["महासागर", "कुआँ", "टैंक", "झील"], answer: "टैंक" },
+            { subject: "रीजनिंग", question: "C, माता है A और B की। यदि D, पति है B का, तो C कौन है D की?", options: ["माता", "बहन", "सास", "चाची"], answer: "सास" },
+            { subject: "रीजनिंग", question: "श्रृंखला को पूरा करें: 4, 10, ?, 82, 244, 730", options: ["24", "28", "77", "218"], answer: "28" },
+            { subject: "रीजनिंग", question: "कैलेण्डर : तारीखें :: शब्दकोश : ?", options: ["शब्द", "पुस्तक", "भाषा", "वाक्य"], answer: "शब्द" },
+            { subject: "रीजनिंग", question: "यदि 1 जनवरी को शुक्रवार है, तो एक अधिवर्ष में मार्च का प्रथम दिन क्या होगा?", options: ["मंगलवार", "बुधवार", "शुक्रवार", "रविवार"], answer: "मंगलवार" },
+            { subject: "रीजनिंग", question: "दिए गए विकल्पों में से लुप्त संख्या ज्ञात कीजिए: 9, 12, 11, 14, 13, ?, 15", options: ["12", "16", "10", "17"], answer: "16" },
+            { subject: "रीजनिंग", question: "एक तस्वीर की ओर इशारा करते हुए, एक व्यक्ति ने कहा, 'मेरा कोई भाई या बहन नहीं है, लेकिन उस व्यक्ति का पिता मेरे पिता का पुत्र है।' वह तस्वीर किसकी थी?", options: ["उसकी अपनी", "उसके पुत्र की", "उसके पिता की", "उसके भतीजे की"], answer: "उसके पुत्र की" },
+            { subject: "रीजनिंग", question: "यदि '+' का अर्थ '÷', '÷' का अर्थ '−', '−' का अर्थ '×' और '×' का अर्थ '+' है, तो 12 + 6 ÷ 3 − 2 × 8 = ?", options: ["-2", "2", "4", "8"], answer: "4" },
+            { subject: "रीजनिंग", question: "कौन सा वेन आरेख 'डॉक्टर, रोगी और मनुष्य' के बीच संबंध को सही ढंग से दर्शाता है?", options: ["तीन अलग वृत्त", "एक वृत्त के अंदर दो अलग वृत्त", "एक वृत्त के अंदर दो जुड़े हुए वृत्त", "तीनों एक दूसरे को काटते हुए वृत्त"], answer: "एक वृत्त के अंदर दो अलग वृत्त" },
+             { subject: "रीजनिंग", question: "यदि बीते कल से पहले वाला दिन रविवार था, तो आने वाले कल से अगले दिन से तीसरा दिन कौन सा होगा?", options: ["रविवार", "सोमवार", "शनिवार", "शुक्रवार"], answer: "शनिवार" },
+            { subject: "रीजनिंग", question: "पाँच लड़के एक पंक्ति में बैठे हैं। A, D के बायीं ओर है और B के दायीं ओर है। E, B के बायीं ओर है, लेकिन C के दायीं ओर है। सिरों पर कौन बैठे हैं?", options: ["A, B", "A, E", "C, D", "B, C"], answer: "C, D" },
+            { subject: "रीजनिंग", question: "उस शब्द-युग्म का चयन करें जो दिए गए युग्म के समान संबंध व्यक्त करता है: मेनू : भोजन", options: ["लाइब्रेरी : पुस्तक", "कैटलॉग : पुस्तकें", "जर्नल : लेख", "अखबार : संपादक"], answer: "कैटलॉग : पुस्तकें" },
+            { subject: "रीजनिंग", question: "दिए गए चार विकल्पों में से तीन एक निश्चित तरीके से समान हैं। विषम का चयन करें।", options: ["आँखें", "नाक", "गला", "कान"], answer: "गला" },
+            { subject: "रीजनिंग", question: "अरुण ने कहा, 'यह लड़की मेरी माँ के पोते की पत्नी है।' अरुण का उस लड़की से क्या रिश्ता है?", options: ["पति", "पिता", "दादा", "ससुर"], answer: "ससुर" },
+
+            // General Knowledge (20 Questions)
+            { subject: "सामान्य ज्ञान", question: "किस सिख गुरु ने 'खालसा पंथ' की स्थापना की थी?", options: ["गुरु तेग बहादुर", "गुरु अर्जुन देव", "गुरु गोबिंद सिंह", "गुरु नानक देव"], answer: "गुरु गोबिंद सिंह" },
+            { subject: "सामान्य ज्ञान", question: "लोकसभा की सदस्यता के लिए उम्मीदवारों की न्यूनतम आयु क्या निर्धारित की गयी है?", options: ["21 वर्ष", "25 वर्ष", "30 वर्ष", "35 वर्ष"], answer: "25 वर्ष" },
+            { subject: "सामान्य ज्ञान", question: "त्रिपिटक' किस धर्म का पवित्र ग्रंथ है?", options: ["बौद्ध धर्म", "जैन धर्म", "हिन्दू धर्म", "पारसी धर्म"], answer: "बौद्ध धर्म" },
+            { subject: "सामान्य ज्ञान", question: "पानीपत का द्वितीय युद्ध किनके बीच हुआ था?", options: ["बाबर और लोदी", "अकबर और हेमू", "अली रजा और चंद्रगुप्त मौर्य", "अकबर और लोदी"], answer: "अकबर और हेमू" },
+            { subject: "सामान्य ज्ञान", question: "भारत के राष्ट्रपति को उनके पद की शपथ कौन दिलाता है?", options: ["प्रधानमंत्री", "भारत के मुख्य न्यायाधीश", "उपराष्ट्रपति", "लोकसभा अध्यक्ष"], answer: "भारत के मुख्य न्यायाधीश" },
+            { subject: "सामान्य ज्ञान", question: "वायुमंडलीय दाब मापने का पैमाना है-", options: ["बैरोमीटर", "मैनोमीटर", "लैक्टोमीटर", "हाइड्रोमीटर"], answer: "बैरोमीटर" },
+            { subject: "सामान्य ज्ञान", question: "भारत में सबसे लंबी सिंचाई नहर कौन सी है?", options: ["सरहिंद नहर", "यमुना नहर", "इंदिरा गांधी नहर", "पूर्वी कोसी नहर"], answer: "इंदिरा गांधी नहर" },
+            { subject: "सामान्य ज्ञान", question: "मोहिनीअट्टम नृत्य रूप निम्नलिखित में से किस राज्य से सम्बद्ध है?", options: ["ओडिशा", "केरल", "कर्नाटक", "तमिलनाडु"], answer: "केरल" },
+            { subject: "सामान्य ज्ञान", question: "संविधान सभा के पहले अध्यक्ष कौन थे?", options: ["डॉ. बी. आर. अम्बेडकर", "डॉ. सच्चिदानंद सिन्हा", "डॉ. राजेंद्र प्रसाद", "इनमें से कोई नहीं"], answer: "डॉ. सच्चिदानंद सिन्हा" },
+            { subject: "सामान्य ज्ञान", question: "नाबार्ड (NABARD) का मुख्यालय कहाँ स्थित है?", options: ["नई दिल्ली", "चेन्नई", "मुंबई", "जयपुर"], answer: "मुंबई" },
+            { subject: "सामान्य ज्ञान", question: "महात्मा गांधी ने किस आंदोलन के लिए 'करो या मरो' का नारा दिया था?", options: ["असहयोग आंदोलन", "नमक सत्याग्रह", "भारत छोड़ो आंदोलन", "खिलाफत आंदोलन"], answer: "भारत छोड़ो आंदोलन" },
+            { subject: "सामान्य ज्ञान", question: "अन्तर्राष्ट्रीय महिला दिवस कब मनाया जाता है?", options: ["8 मार्च", "8 अगस्त", "5 सितम्बर", "9 नवम्बर"], answer: "8 मार्च" },
+            { subject: "सामान्य ज्ञान", question: "राज्यसभा में होने वाली सभाओं की अध्यक्षता कौन करता है?", options: ["उपराष्ट्रपति", "राष्ट्रपति", "प्रधानमंत्री", "भारत के मुख्य न्यायाधीश"], answer: "उपराष्ट्रपति" },
+            { subject: "सामान्य ज्ञान", question: "हड़प नीति (Doctrine of Lapse) किसने अपनाई थी?", options: ["लॉर्ड कर्जन", "लॉर्ड वेलेस्ली", "लॉर्ड डलहौजी", "लॉर्ड विलियम बेंटिंक"], answer: "लॉर्ड डलहौजी" },
+            { subject: "सामान्य ज्ञान", question: "किसे भारत के लौह पुरुष के नाम से जाना जाता है?", options: ["महात्मा गांधी", "जवाहरलाल नेहरू", "सरदार वल्लभभाई पटेल", "सुभाष चंद्र बोस"], answer: "सरदार वल्लभभाई पटेल" },
+            { subject: "सामान्य ज्ञान", question: "किस ग्रह को 'लाल ग्रह' के नाम से जाना जाता है?", options: ["शुक्र", "मंगल", "बृहस्पति", "शनि"], answer: "मंगल" },
+            { subject: "सामान्य ज्ञान", question: "भारतीय संविधान में कितने मौलिक कर्तव्य हैं?", options: ["9", "11", "12", "20"], answer: "11" },
+            { subject: "सामान्य ज्ञान", question: "भारत का सबसे बड़ा सार्वजनिक क्षेत्र का बैंक कौन सा है?", options: ["पंजाब नेशनल बैंक", "भारतीय स्टेट बैंक", "सेंट्रल बैंक ऑफ इंडिया", "बैंक ऑफ बड़ौदा"], answer: "भारतीय स्टेट बैंक" },
+            { subject: "सामान्य ज्ञान", question: "ओजोन परत कहाँ पायी जाती है?", options: ["क्षोभमंडल", "आयनमंडल", "बहिर्मंडल", "समतापमंडल"], answer: "समतापमंडल" },
+            { subject: "सामान्य ज्ञान", question: "वेदों की ओर लौटो' का नारा किसने दिया था?", options: ["स्वामी विवेकानंद", "स्वामी दयानंद सरस्वती", "रामकृष्ण परमहंस", "राजा राम मोहन राय"], answer: "स्वामी दयानंद सरस्वती" },
+
+            // Computer & IT (15 Questions)
+            { subject: "कंप्यूटर", question: "CPU का पूरा नाम क्या है?", options: ["कंट्रोल प्रोसेसिंग यूनिट", "सेंट्रल प्रोसेसिंग यूनिट", "कंप्यूटर प्रोसेसिंग यूनिट", "कोर प्रोग्रामिंग यूटिलिटी"], answer: "सेंट्रल प्रोसेसिंग यूनिट" },
+            { subject: "कंप्यूटर", question: "ई-मेल भेजते समय, कौन सी लाइन संदेश की विषय-वस्तु के बारे में बता देती है?", options: ["To", "Subject", "Contents", "CC"], answer: "Subject" },
+            { subject: "कंप्यूटर", question: "कंप्यूटर में स्थायी मेमोरी (Permanent Memory) को क्या कहते हैं?", options: ["RAM", "ROM", "CPU", "CD-ROM"], answer: "ROM" },
+            { subject: "कंप्यूटर", question: "MS-Word किसका उदाहरण है?", options: ["ऑपरेटिंग सिस्टम", "एप्लीकेशन सॉफ्टवेयर", "कम्पाइलर", "इनपुट डिवाइस"], answer: "एप्लीकेशन सॉफ्टवेयर" },
+            { subject: "कंप्यूटर", question: "एक गीगाबाइट (GB) में कितने मेगाबाइट (MB) होते हैं?", options: ["1000", "1024", "1280", "2048"], answer: "1024" },
+            { subject: "कंप्यूटर", question: "WWW का पूरा रूप क्या है?", options: ["Web World Wide", "World Wide Web", "World Whole Web", "Web Window World"], answer: "World Wide Web" },
+            { subject: "कंप्यूटर", question: "इनमें से कौन सा इनपुट डिवाइस नहीं है?", options: ["माउस", "कीबोर्ड", "स्कैनर", "प्रिंटर"], answer: "प्रिंटर" },
+            { subject: "कंप्यूटर", question: "कंप्यूटर का मस्तिष्क किसे कहा जाता है?", options: ["मॉनिटर", "कीबोर्ड", "CPU", "RAM"], answer: "CPU" },
+            { subject: "कंप्यूटर", question: "निम्नलिखित में से कौन एक ऑपरेटिंग सिस्टम नहीं है?", options: ["Windows", "Linux", "Oracle", "DOS"], answer: "Oracle" },
+            { subject: "कंप्यूटर", question: "इंटरनेट के संदर्भ में, URL का पूर्ण रूप क्या है?", options: ["Uniform Resource Locator", "Universal Resource Link", "Uniform Resource Link", "Universal Resource Locator"], answer: "Uniform Resource Locator" },
+            { subject: "कंप्यूटर", question: "Ctrl + C शॉर्टकट की का प्रयोग किस लिए होता है?", options: ["कट करने के लिए", "कॉपी करने के लिए", "पेस्ट करने के लिए", "अंडू करने के लिए"], answer: "कॉपी करने के लिए" },
+            { subject: "कंप्यूटर", question: "भारत में निर्मित प्रथम सुपर कंप्यूटर का नाम क्या है?", options: ["आकाश", "परम", "मेघा", "अर्जुन"], answer: "परम" },
+            { subject: "कंप्यूटर", question: "एक कम्प्यूटर वायरस होता है-", options: ["एक हार्डवेयर कॉम्पोनेन्ट", "एक सॉफ्टवेयर प्रोग्राम", "एक बैक्टीरिया", "एक फ्रीवेयर"], answer: "एक सॉफ्टवेयर प्रोग्राम" },
+            { subject: "कंप्यूटर", question: "आर्टिफिशियल इंटेलिजेंस (AI) का जनक किसे माना जाता है?", options: ["चार्ल्स बैबेज", "एलन ट्यूरिंग", "जॉन मैकार्थी", "बिल गेट्स"], answer: "जॉन मैकार्थी" },
+            { subject: "कंप्यूटर", question: "किसी डॉक्यूमेंट से टेक्स्ट को कट करने के लिए कीबोर्ड शॉर्टकट क्या है?", options: ["Ctrl + V", "Ctrl + X", "Ctrl + A", "Ctrl + Z"], answer: "Ctrl + X" },
+
+            // UP GK (20 Questions)
+            { subject: "UP GK", question: "उत्तर प्रदेश दिवस किस तिथि को मनाया जाता है?", options: ["23 जनवरी", "25 जनवरी", "24 जनवरी", "26 जनवरी"], answer: "24 जनवरी" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में ‘रानी लक्ष्मीबाई बाँध परियोजना’ निर्मित है:", options: ["घाघरा नदी पर", "बेतवा नदी पर", "सोन नदी पर", "चम्बल नदी पर"], answer: "बेतवा नदी पर" },
+            { subject: "UP GK", question: "उत्तर प्रदेश का सबसे बड़ा जिला कौन सा है (क्षेत्रफल की दृष्टि से)?", options: ["सोनभद्र", "प्रयागराज", "लखीमपुर खीरी", "लखनऊ"], answer: "लखीमपुर खीरी" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में विधानसभा को भंग करने का अधिकार किसे है?", options: ["राज्यपाल को", "राष्ट्रपति को", "मुख्यमंत्री को", "किसी को नहीं"], answer: "राज्यपाल को" },
+            { subject: "UP GK", question: "अशोक द्वारा निर्मित भारत का राजचिह्न 'सिंह स्तंभ' उत्तर प्रदेश में कहाँ पर है?", options: ["इलाहाबाद", "मथुरा", "अलीगढ़", "सारनाथ"], answer: "सारनाथ" },
+            { subject: "UP GK", question: "बुलंद दरवाजा कहाँ स्थित है?", options: ["आगरा", "दिल्ली", "फतेहपुर सीकरी", "जयपुर"], answer: "फतेहपुर सीकरी" },
+            { subject: "UP GK", question: "उत्तर प्रदेश का राजकीय वृक्ष क्या है?", options: ["नीम", "पीपल", "अशोक", "बरगद"], answer: "अशोक" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में यूरेनियम के भंडार कहाँ पाए गए हैं?", options: ["ललितपुर", "बांदा", "हमीरपुर", "सोनभद्र"], answer: "ललितपुर" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में कितने मंडल (Divisions) हैं?", options: ["15", "17", "18", "20"], answer: "18" },
+            { subject: "UP GK", question: "नवाबगंज पक्षी अभयारण्य किन जिलों में स्थित है?", options: ["गाजियाबाद, गोंडा", "रायबरेली", "उन्नाव", "एटा, मैनपुरी"], answer: "उन्नाव" },
+            { subject: "UP GK", question: "उत्तर प्रदेश के किस शहर को 'चर्म उद्योग की राजधानी' के रूप में जाना जाता है?", options: ["आगरा", "कानपुर", "लखनऊ", "मेरठ"], answer: "कानपुर" },
+            { subject: "UP GK", question: "प्रसिद्ध 'ठुमरी' गायिका गिरिजा देवी का जन्म किस शहर में हुआ था?", options: ["लखनऊ", "अलीगढ़", "मुरादाबाद", "वाराणसी"], answer: "वाराणसी" },
+            { subject: "UP GK", question: "उत्तर प्रदेश का कौन सा जिला पीतल की मूर्तियों के लिए प्रसिद्ध है?", options: ["फर्रुखाबाद", "मुरादाबाद", "मथुरा", "मिर्जापुर"], answer: "मथुरा" },
+            { subject: "UP GK", question: "चौधरी चरण सिंह अंतर्राष्ट्रीय हवाई अड्डा कहाँ स्थित है?", options: ["लखनऊ", "आगरा", "वाराणसी", "प्रयागराज"], answer: "लखनऊ" },
+            { subject: "UP GK", question: "उत्तर प्रदेश का राजकीय पुष्प कौन सा है?", options: ["गुलाब", "कमल", "पलाश", "चमेली"], answer: "पलाश" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में लोकसभा की कितनी सीटें हैं?", options: ["75", "80", "90", "100"], answer: "80" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में ‘दुधवा नेशनल पार्क’ किस जिले में स्थित है?", options: ["लखीमपुर-खीरी", "वाराणसी", "पीलीभीत", "बहराइच"], answer: "लखीमपुर-खीरी" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में ‘कुम्भ मेला’ का आयोजन किस शहर में होता है?", options: ["वाराणसी", "प्रयागराज", "अयोध्या", "मथुरा"], answer: "प्रयागराज" },
+            { subject: "UP GK", question: "उत्तर प्रदेश के प्रथम मुख्यमंत्री कौन थे?", options: ["सुश्री मायावती", "गोविंद बल्लभ पंत", "चौधरी चरण सिंह", "मुलायम सिंह यादव"], answer: "गोविंद बल्लभ पंत" },
+            { subject: "UP GK", question: "उत्तर प्रदेश में विधान परिषद के सदस्यों की संख्या कितनी है?", options: ["80", "90", "100", "403"], answer: "100" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timerInterval;
+
+        function startTimer(durationInSeconds) {
+            let timer = durationInSeconds;
+            timerInterval = setInterval(() => {
+                let hours = Math.floor(timer / 3600);
+                let minutes = Math.floor((timer % 3600) / 60);
+                let seconds = timer % 60;
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                elements.timer.textContent = `${hours}:${minutes}:${seconds}`;
+                timer--;
+                
+                if (timer < 600) { // 10 minutes warning
+                    elements.timerContainer.classList.add('warning');
+                }
+
+                if (timer < 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            if(timerInterval) clearInterval(timerInterval);
+            elements.resultsContainer.classList.add('hidden');
+            elements.quizContent.classList.remove('hidden');
+            elements.nextBtn.textContent = 'अगला प्रश्न';
+            elements.nextBtn.classList.add('hidden');
+            elements.timerContainer.classList.remove('warning');
+            showQuestion();
+            startTimer(120 * 60); // 120 minutes
+        }
+        
+        function showQuestion() {
+            resetState();
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            elements.questionText.textContent = currentQuestion.question;
+            elements.questionCounter.textContent = `प्रश्न ${currentQuestionIndex + 1} / ${quizQuestions.length}`;
+            elements.progressBar.style.width = `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`;
+
+            const shuffledOptions = [...currentQuestion.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-btn');
+                button.addEventListener('click', () => selectAnswer(button, option, currentQuestion.answer));
+                elements.optionsContainer.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            elements.nextBtn.classList.add('hidden');
+            while (elements.optionsContainer.firstChild) {
+                elements.optionsContainer.removeChild(elements.optionsContainer.firstChild);
+            }
+        }
+
+        function selectAnswer(selectedBtn, selectedOption, correctAnswer) {
+            if (selectedOption === correctAnswer) {
+                score++;
+                selectedBtn.classList.add('correct');
+            } else {
+                score -= 0.25;
+                selectedBtn.classList.add('incorrect');
+            }
+            
+            Array.from(elements.optionsContainer.children).forEach(button => {
+                if (button.textContent === correctAnswer) {
+                    button.classList.add('correct');
+                }
+                button.disabled = true;
+            });
+
+            if(currentQuestionIndex === quizQuestions.length - 1) {
+                elements.nextBtn.textContent = 'परिणाम देखें';
+            }
+            elements.nextBtn.classList.remove('hidden');
+        }
+
+        function showResults() {
+            clearInterval(timerInterval);
+            elements.quizContent.classList.add('hidden');
+            elements.resultsContainer.classList.remove('hidden');
+            const finalScore = Math.max(0, score); 
+            elements.scoreText.textContent = `आपने ${quizQuestions.length} में से ${finalScore.toFixed(2)} अंक प्राप्त किए।`;
+        }
+        
+        elements.startQuizBtn.addEventListener('click', () => {
+            elements.examInfoContainer.classList.add('hidden');
+            startQuiz();
+        });
+
+        elements.nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizQuestions.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        elements.retryBtn.addEventListener('click', startQuiz);
+    });
+    </script>
+</body>
+</html>
